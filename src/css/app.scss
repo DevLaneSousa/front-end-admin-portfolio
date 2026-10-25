@@ -1,0 +1,52 @@
+:root {
+  --lc-border: rgba(255, 255, 255, 0.08);
+  --lc-surface: #0b0b0b;
+  --lc-surface-raised: #151515;
+  --lc-muted: rgba(255, 255, 255, 0.6);
+}
+
+body {
+  background: #000;
+}
+
+.lc-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.lc-card {
+  background: var(--lc-surface);
+  border: 1px solid var(--lc-border);
+  border-radius: 14px;
+}
+
+.lc-muted {
+  color: var(--lc-muted);
+}
+
+.lc-mono {
+  font-family: 'JetBrains Mono Variable', ui-monospace, monospace;
+}
+
+.lc-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.lc-form-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lc-form-grid .lc-span {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 700px) {
+  .lc-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
