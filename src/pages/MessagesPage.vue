@@ -7,6 +7,11 @@ import { useNotify } from '@/composables/useNotify';
 import { messagesApi, type Message } from '@/services/api';
 
 const notify = useNotify();
+
+function whatsappLink(phone: string) {
+  const digits = phone.replace(/\D/g, '');
+  return `https://wa.me/${digits.length <= 11 ? `55${digits}` : digits}`;
+}
 const messages = ref<Message[]>([]);
 const loading = ref(true);
 const view = ref<'INBOX' | 'ARCHIVED'>('INBOX');
@@ -109,6 +114,16 @@ onMounted(load);
               <div class="lc-muted">
                 {{ selected.name }} ·
                 <a :href="`mailto:${selected.email}`" class="text-primary">{{ selected.email }}</a>
+                <template v-if="selected.phone">
+                  ·
+                  <a
+                    :href="whatsappLink(selected.phone)"
+                    target="_blank"
+                    rel="noopener"
+                    class="text-primary"
+                    >{{ selected.phone }}</a
+                  >
+                </template>
                 <template v-if="selected.company"> · {{ selected.company }}</template>
               </div>
             </div>

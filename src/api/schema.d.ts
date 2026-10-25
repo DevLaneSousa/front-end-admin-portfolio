@@ -5114,6 +5114,7 @@ export interface components {
             email: string;
             message: string;
             name: string;
+            phone?: string | null;
             subject: string;
         };
         Count: {
@@ -5181,6 +5182,7 @@ export interface components {
             id: string;
             message: string;
             name: string;
+            phone: string | null;
             /** @enum {string} */
             status: "NEW" | "READ" | "ARCHIVED";
             subject: string;
