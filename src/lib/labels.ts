@@ -4,6 +4,7 @@ import type {
   ExperienceKind,
   PostCategory,
   ProjectSectionKind,
+  StackKind,
   TalkKind,
   TechLayer,
 } from '@/api';
@@ -40,7 +41,15 @@ export const LABELS = {
     MENTORSHIP: 'Mentoria',
     WORKSHOP: 'Minicurso',
   } satisfies Record<TalkKind, string>,
+  stackKind: {
+    PRACTICE: 'Competência / prática',
+    TECHNOLOGY: 'Tecnologia',
+    TOOL: 'Ferramenta',
+    INTEGRATION_PATTERN: 'Padrão de integração',
+    INTEGRATION: 'Integração específica',
+  } satisfies Record<StackKind, string>,
   techLayer: {
+    PRODUCT: 'Produto',
     FRONTEND: 'Front-end',
     BACKEND: 'Back-end',
     DATABASE: 'Banco de dados',

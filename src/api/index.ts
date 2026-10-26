@@ -37,6 +37,7 @@ export type Device = ProjectMediaInput['device'];
 export type ProjectSectionKind = ProjectSectionInput['kind'];
 export type Availability = ProfileInput['availability'];
 export type TechLayer = Schemas['TechnologyRow']['layer'];
+export type StackKind = Schemas['TechnologyRow']['kind'];
 export type TalkKind = Schemas['TalkRow']['kind'];
 export type ExperienceKind = Schemas['ExperienceRow']['kind'];
 export type MessageStatus = Message['status'];

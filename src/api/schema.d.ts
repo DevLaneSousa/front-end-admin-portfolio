@@ -5556,10 +5556,13 @@ export interface components {
             title: string;
         };
         PublicTechnology: {
+            description: string | null;
             icon: string | null;
             id: string;
             /** @enum {string} */
-            layer: "FRONTEND" | "BACKEND" | "DATABASE" | "DESIGN" | "MOBILE" | "DEVOPS" | "ANIMATION" | "INTEGRATION";
+            kind: "PRACTICE" | "TECHNOLOGY" | "TOOL" | "INTEGRATION_PATTERN" | "INTEGRATION";
+            /** @enum {string} */
+            layer: "PRODUCT" | "FRONTEND" | "BACKEND" | "DATABASE" | "DESIGN" | "MOBILE" | "DEVOPS" | "ANIMATION" | "INTEGRATION";
             name: string;
             slug: string;
         };
@@ -5663,23 +5666,35 @@ export interface components {
             title: string;
         };
         TechnologyInput: {
+            description?: string | null;
             icon?: string | null;
             /** @default true */
             isPublished: boolean;
+            /**
+             * @default TECHNOLOGY
+             * @enum {string}
+             */
+            kind: "PRACTICE" | "TECHNOLOGY" | "TOOL" | "INTEGRATION_PATTERN" | "INTEGRATION";
             /** @enum {string} */
-            layer: "FRONTEND" | "BACKEND" | "DATABASE" | "DESIGN" | "MOBILE" | "DEVOPS" | "ANIMATION" | "INTEGRATION";
+            layer: "PRODUCT" | "FRONTEND" | "BACKEND" | "DATABASE" | "DESIGN" | "MOBILE" | "DEVOPS" | "ANIMATION" | "INTEGRATION";
             name: string;
             /** @default 0 */
             order: number;
             slug: string;
         };
         TechnologyRow: {
+            description?: string | null;
             icon?: string | null;
             id: string;
             /** @default true */
             isPublished: boolean;
+            /**
+             * @default TECHNOLOGY
+             * @enum {string}
+             */
+            kind: "PRACTICE" | "TECHNOLOGY" | "TOOL" | "INTEGRATION_PATTERN" | "INTEGRATION";
             /** @enum {string} */
-            layer: "FRONTEND" | "BACKEND" | "DATABASE" | "DESIGN" | "MOBILE" | "DEVOPS" | "ANIMATION" | "INTEGRATION";
+            layer: "PRODUCT" | "FRONTEND" | "BACKEND" | "DATABASE" | "DESIGN" | "MOBILE" | "DEVOPS" | "ANIMATION" | "INTEGRATION";
             name: string;
             /** @default 0 */
             order: number;
