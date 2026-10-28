@@ -7,6 +7,8 @@ import MediaUploader from '@/components/MediaUploader.vue';
 import PageHeader from '@/components/PageHeader.vue';
 import { siteUrl } from '@/composables/format';
 import { useNotify } from '@/composables/useNotify';
+import EnglishFields from '@/components/EnglishFields.vue';
+import { withEnglish, type EnglishField, type EnglishValues } from '@/lib/translations';
 import { contentApi, projectsApi, type Row, type UploadedMedia } from '@/services/api';
 
 const props = defineProps<{ id?: string }>();
@@ -37,9 +39,43 @@ const empty = (): ProjectInput => ({
   technologyIds: [],
   media: [],
   sections: [],
+  translations: { en: {} },
 });
 
 const form = reactive<ProjectInput>(empty());
+
+const projectEnglishFields: EnglishField[] = [
+  { key: 'title', label: 'Título', type: 'text' },
+  { key: 'subtitle', label: 'Subtítulo', type: 'text' },
+  { key: 'summary', label: 'Resumo', type: 'textarea' },
+  { key: 'client', label: 'Cliente', type: 'text' },
+  { key: 'myRole', label: 'Meu papel', type: 'textarea' },
+  { key: 'challenge', label: 'O desafio', type: 'textarea' },
+  { key: 'solution', label: 'A solução', type: 'textarea' },
+  { key: 'results', label: 'Resultados', type: 'textarea' },
+  { key: 'seoTitle', label: 'Título SEO', type: 'text' },
+  { key: 'seoDescription', label: 'Descrição SEO', type: 'textarea' },
+];
+const sectionEnglishFields: EnglishField[] = [
+  { key: 'title', label: 'Título da seção', type: 'text', span: true },
+  { key: 'body', label: 'Texto da seção', type: 'textarea' },
+];
+
+const projectEnglish = computed<EnglishValues>({
+  get: () => form.translations.en ?? {},
+  set: (value) => {
+    form.translations = { ...form.translations, en: value };
+  },
+});
+
+function sectionEnglish(index: number) {
+  return form.sections[index]?.translations.en ?? {};
+}
+
+function setSectionEnglish(index: number, value: EnglishValues) {
+  const section = form.sections[index];
+  if (section) section.translations = { ...section.translations, en: value };
+}
 const tab = ref('dados');
 const saving = ref(false);
 const loading = ref(Boolean(props.id));
@@ -93,13 +129,15 @@ onMounted(async () => {
             order,
           }),
         ),
-        sections: project.sections.map(({ kind, title, body, mediaUrl, order }) => ({
+        sections: project.sections.map(({ kind, title, body, mediaUrl, order, translations }) => ({
           kind,
           title,
           body,
           mediaUrl,
           order,
+          translations: { en: {}, ...translations },
         })),
+        translations: { en: {}, ...project.translations },
       });
     }
   } catch (error) {
@@ -133,6 +171,7 @@ function addSection() {
     body: '',
     mediaUrl: null,
     order: form.sections.length,
+    translations: { en: {} },
   });
 }
 
@@ -142,7 +181,12 @@ async function save(status?: ProjectInput['status']) {
   try {
     const payload: ProjectInput = {
       ...form,
-      sections: form.sections.map((s, order) => ({ ...s, order })),
+      translations: withEnglish(form.translations, form.translations.en ?? {}),
+      sections: form.sections.map((s, order) => ({
+        ...s,
+        order,
+        translations: withEnglish(s.translations, s.translations.en ?? {}),
+      })),
       media: form.media.map((m, order) => ({ ...m, order })),
     };
     if (props.id) {
@@ -213,6 +257,7 @@ async function save(status?: ProjectInput['status']) {
         <q-tab name="case" label="Case" />
         <q-tab name="midias" :label="`Mídias (${form.media.length})`" />
         <q-tab name="seo" label="SEO" />
+        <q-tab name="en" label="Inglês (EN)" />
       </q-tabs>
       <q-separator dark />
 
@@ -438,6 +483,25 @@ async function save(status?: ProjectInput['status']) {
               counter
               maxlength="160"
               class="lc-span"
+            />
+          </div>
+        </q-tab-panel>
+
+        <q-tab-panel name="en">
+          <div class="lc-form-grid">
+            <EnglishFields
+              v-model="projectEnglish"
+              :fields="projectEnglishFields"
+              :source="form"
+              default-open
+            />
+            <EnglishFields
+              v-for="(section, index) in form.sections"
+              :key="index"
+              :model-value="sectionEnglish(index)"
+              :fields="sectionEnglishFields"
+              :source="section"
+              @update:model-value="setSectionEnglish(index, $event)"
             />
           </div>
         </q-tab-panel>

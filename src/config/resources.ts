@@ -12,6 +12,7 @@ export interface Field {
   hint?: string;
   span?: boolean;
   default?: unknown;
+  translatable?: boolean;
 }
 
 export interface ResourceConfig {
@@ -40,15 +41,29 @@ export const resources: ResourceConfig[] = [
     columns: ['title', 'description'],
     sortable: true,
     fields: [
-      { key: 'title', label: 'Título', type: 'text', required: true },
+      { key: 'title', translatable: true, label: 'Título', type: 'text', required: true },
       {
         key: 'icon',
         label: 'Ícone',
         type: 'text',
         hint: 'rocket, building, newspaper, plug, smartphone, pen-tool, file-text',
       },
-      { key: 'description', label: 'Descrição', type: 'textarea', required: true, span: true },
-      { key: 'deliverables', label: 'Entregáveis', type: 'list', span: true, default: [] },
+      {
+        key: 'description',
+        translatable: true,
+        label: 'Descrição',
+        type: 'textarea',
+        required: true,
+        span: true,
+      },
+      {
+        key: 'deliverables',
+        translatable: true,
+        label: 'Entregáveis',
+        type: 'list',
+        span: true,
+        default: [],
+      },
       published,
     ],
   },
@@ -61,15 +76,29 @@ export const resources: ResourceConfig[] = [
     columns: ['title', 'description'],
     sortable: true,
     fields: [
-      { key: 'title', label: 'Título', type: 'text', required: true },
+      { key: 'title', translatable: true, label: 'Título', type: 'text', required: true },
       {
         key: 'icon',
         label: 'Ícone',
         type: 'text',
         hint: 'search, pen-tool, file-text, layout, database, send',
       },
-      { key: 'description', label: 'Descrição', type: 'textarea', required: true, span: true },
-      { key: 'artifacts', label: 'Entregáveis', type: 'list', span: true, default: [] },
+      {
+        key: 'description',
+        translatable: true,
+        label: 'Descrição',
+        type: 'textarea',
+        required: true,
+        span: true,
+      },
+      {
+        key: 'artifacts',
+        translatable: true,
+        label: 'Entregáveis',
+        type: 'list',
+        span: true,
+        default: [],
+      },
       published,
     ],
   },
@@ -82,7 +111,7 @@ export const resources: ResourceConfig[] = [
     columns: ['name', 'kind', 'layer'],
     sortable: true,
     fields: [
-      { key: 'name', label: 'Nome', type: 'text', required: true },
+      { key: 'name', translatable: true, label: 'Nome', type: 'text', required: true },
       {
         key: 'slug',
         label: 'Slug',
@@ -107,6 +136,7 @@ export const resources: ResourceConfig[] = [
       },
       {
         key: 'description',
+        translatable: true,
         label: 'Descrição curta',
         type: 'text',
         hint: 'aparece nas integrações, ex.: ERP da construção · Paycom',
@@ -124,7 +154,7 @@ export const resources: ResourceConfig[] = [
     columns: ['name', 'slug'],
     sortable: true,
     fields: [
-      { key: 'name', label: 'Nome', type: 'text', required: true },
+      { key: 'name', translatable: true, label: 'Nome', type: 'text', required: true },
       {
         key: 'slug',
         label: 'Slug',
@@ -143,8 +173,14 @@ export const resources: ResourceConfig[] = [
     columns: ['title', 'organization', 'startDate'],
     sortable: true,
     fields: [
-      { key: 'title', label: 'Título', type: 'text', required: true },
-      { key: 'organization', label: 'Organização', type: 'text', required: true },
+      { key: 'title', translatable: true, label: 'Título', type: 'text', required: true },
+      {
+        key: 'organization',
+        translatable: true,
+        label: 'Organização',
+        type: 'text',
+        required: true,
+      },
       {
         key: 'kind',
         label: 'Tipo',
@@ -154,7 +190,7 @@ export const resources: ResourceConfig[] = [
       },
       { key: 'startDate', label: 'Início', type: 'date', required: true },
       { key: 'endDate', label: 'Fim (vazio = atual)', type: 'date' },
-      { key: 'description', label: 'Descrição', type: 'textarea', span: true },
+      { key: 'description', translatable: true, label: 'Descrição', type: 'textarea', span: true },
       published,
     ],
   },
@@ -167,8 +203,8 @@ export const resources: ResourceConfig[] = [
     columns: ['title', 'event', 'date'],
     sortable: true,
     fields: [
-      { key: 'title', label: 'Título', type: 'text', required: true },
-      { key: 'event', label: 'Evento', type: 'text', required: true },
+      { key: 'title', translatable: true, label: 'Título', type: 'text', required: true },
+      { key: 'event', translatable: true, label: 'Evento', type: 'text', required: true },
       {
         key: 'kind',
         label: 'Tipo',
@@ -177,8 +213,8 @@ export const resources: ResourceConfig[] = [
         options: options(LABELS.talkKind),
       },
       { key: 'date', label: 'Data', type: 'date', required: true },
-      { key: 'location', label: 'Local', type: 'text' },
-      { key: 'audience', label: 'Público', type: 'text' },
+      { key: 'location', translatable: true, label: 'Local', type: 'text' },
+      { key: 'audience', translatable: true, label: 'Público', type: 'text' },
       { key: 'link', label: 'Link do evento', type: 'url' },
       { key: 'coverUrl', label: 'Imagem', type: 'image' },
       published,
@@ -193,8 +229,8 @@ export const resources: ResourceConfig[] = [
     columns: ['title', 'issuer', 'hours'],
     sortable: true,
     fields: [
-      { key: 'title', label: 'Título', type: 'text', required: true },
-      { key: 'issuer', label: 'Emissor', type: 'text', required: true },
+      { key: 'title', translatable: true, label: 'Título', type: 'text', required: true },
+      { key: 'issuer', translatable: true, label: 'Emissor', type: 'text', required: true },
       { key: 'hours', label: 'Carga horária', type: 'text' },
       {
         key: 'category',

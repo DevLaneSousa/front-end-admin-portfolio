@@ -2,9 +2,11 @@
 import type { ProfileInput } from '@/api';
 import { AVAILABILITIES, LABELS } from '@/lib/labels';
 import { computed, onMounted, reactive, ref } from 'vue';
+import EnglishFields from '@/components/EnglishFields.vue';
 import MediaUploader from '@/components/MediaUploader.vue';
 import PageHeader from '@/components/PageHeader.vue';
 import { useNotify } from '@/composables/useNotify';
+import { withEnglish, type EnglishField, type EnglishValues } from '@/lib/translations';
 import { profileApi } from '@/services/api';
 
 const notify = useNotify();
@@ -25,6 +27,23 @@ const form = reactive<ProfileInput>({
   resumeUrl: null,
   email: '',
   whatsapp: null,
+  translations: { en: {} },
+});
+
+const englishFields: EnglishField[] = [
+  { key: 'roleTitle', label: 'Cargo no crachá', type: 'text' },
+  { key: 'company', label: 'Empresa', type: 'text' },
+  { key: 'headline', label: 'Frase do hero', type: 'text', span: true },
+  { key: 'bioShort', label: 'Bio curta', type: 'textarea' },
+  { key: 'bioLong', label: 'Bio longa', type: 'textarea' },
+  { key: 'location', label: 'Localização', type: 'text' },
+];
+
+const english = computed<EnglishValues>({
+  get: () => form.translations.en ?? {},
+  set: (value) => {
+    form.translations = { ...form.translations, en: value };
+  },
 });
 
 const availabilityOptions = AVAILABILITIES.map((value) => ({
@@ -35,7 +54,8 @@ const photo = computed(() => form.badgePhotoUrl ?? form.avatarUrl);
 
 onMounted(async () => {
   try {
-    Object.assign(form, await profileApi.get());
+    const profile = await profileApi.get();
+    Object.assign(form, profile, { translations: { en: {}, ...profile.translations } });
   } catch (error) {
     notify.error(error);
   } finally {
@@ -46,7 +66,11 @@ onMounted(async () => {
 async function save() {
   saving.value = true;
   try {
-    Object.assign(form, await profileApi.update({ ...form }));
+    const profile = await profileApi.update({
+      ...form,
+      translations: withEnglish(form.translations, form.translations.en ?? {}),
+    });
+    Object.assign(form, profile, { translations: { en: {}, ...profile.translations } });
     notify.success('Perfil atualizado');
   } catch (error) {
     notify.error(error);
@@ -139,6 +163,7 @@ async function save() {
               :ratio="3"
             />
           </div>
+          <EnglishFields v-model="english" :fields="englishFields" :source="form" />
         </div>
       </div>
 

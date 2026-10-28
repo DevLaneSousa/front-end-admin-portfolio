@@ -50,3 +50,25 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.lc-english {
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.lc-english .q-expansion-item__content {
+  padding: 0 16px 16px;
+}
+
+.lc-english__flag {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--q-primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+}

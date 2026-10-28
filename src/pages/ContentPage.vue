@@ -2,12 +2,14 @@
 import { slugify } from '@/lib/labels';
 import type { QTableColumn } from 'quasar';
 import { computed, ref, watch } from 'vue';
+import EnglishFields from '@/components/EnglishFields.vue';
 import ListInput from '@/components/ListInput.vue';
 import MediaUploader from '@/components/MediaUploader.vue';
 import PageHeader from '@/components/PageHeader.vue';
 import { findResource, type Field } from '@/config/resources';
 import { formatDate, toInputDate } from '@/composables/format';
 import { useNotify } from '@/composables/useNotify';
+import { englishOf, withEnglish, type EnglishField, type EnglishValues } from '@/lib/translations';
 import { contentApi, type Row } from '@/services/api';
 
 const props = defineProps<{ resourceKey: string }>();
@@ -19,6 +21,19 @@ const dialog = ref(false);
 const saving = ref(false);
 const editingId = ref<string | null>(null);
 const draft = ref<Record<string, unknown>>({});
+const english = ref<EnglishValues>({});
+const savedTranslations = ref<unknown>({});
+
+const englishFields = computed<EnglishField[]>(() =>
+  (resource.value?.fields ?? [])
+    .filter((field) => field.translatable)
+    .map((field) => ({
+      key: field.key,
+      label: field.label,
+      type: field.type === 'list' ? 'list' : field.type === 'textarea' ? 'textarea' : 'text',
+      span: field.span,
+    })),
+);
 
 const columns = computed<QTableColumn<Row>[]>(() => {
   const config = resource.value;
@@ -72,6 +87,8 @@ function openEditor(row?: Row) {
       return [field.key, field.type === 'date' ? toInputDate(value) : value];
     }),
   );
+  savedTranslations.value = row?.translations ?? {};
+  english.value = englishOf(row?.translations);
   dialog.value = true;
 }
 
@@ -94,6 +111,9 @@ function payload(): Record<string, unknown> {
     data[field.key] = value;
   }
   if ('slug' in data && !data.slug) data.slug = slugify(String(data.name ?? data.title ?? ''));
+  if (englishFields.value.length > 0) {
+    data.translations = withEnglish(savedTranslations.value, english.value);
+  }
   return data;
 }
 
@@ -275,6 +295,12 @@ watch(() => props.resourceKey, load, { immediate: true });
                 />
               </div>
             </template>
+            <EnglishFields
+              v-if="englishFields.length > 0"
+              v-model="english"
+              :fields="englishFields"
+              :source="draft"
+            />
           </q-card-section>
           <q-card-actions align="right" class="q-pa-md">
             <q-btn flat no-caps label="Cancelar" v-close-popup />

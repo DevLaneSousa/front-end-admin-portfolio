@@ -4455,7 +4455,9 @@ export interface paths {
         /** Tudo que a landing precisa numa chamada */
         get: {
             parameters: {
-                query?: never;
+                query?: {
+                    lang?: "pt" | "en";
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
@@ -4690,6 +4692,7 @@ export interface paths {
                     category?: string;
                     featured?: "true" | "false";
                     kind?: "DEV" | "DESIGN";
+                    lang?: "pt" | "en";
                     page?: number;
                     perPage?: number;
                     tech?: string;
@@ -4749,7 +4752,9 @@ export interface paths {
         };
         get: {
             parameters: {
-                query?: never;
+                query?: {
+                    lang?: "pt" | "en";
+                };
                 header?: never;
                 path: {
                     slug: string;
@@ -5018,6 +5023,7 @@ export interface components {
                 /** @default 0 */
                 order: number;
                 title: string;
+                translations?: components["schemas"]["Translations"];
             }[];
             seoDescription?: string | null;
             seoTitle?: string | null;
@@ -5033,6 +5039,7 @@ export interface components {
             /** @default [] */
             technologyIds: string[];
             title: string;
+            translations?: components["schemas"]["Translations"];
             year?: number | null;
         };
         AdminProjectRow: {
@@ -5070,6 +5077,7 @@ export interface components {
             /** @default 0 */
             order: number;
             slug: string;
+            translations?: components["schemas"]["Translations"];
         };
         CategoryRow: {
             id: string;
@@ -5077,6 +5085,7 @@ export interface components {
             /** @default 0 */
             order: number;
             slug: string;
+            translations?: components["schemas"]["Translations"];
         };
         CertificationInput: {
             /** @enum {string} */
@@ -5090,6 +5099,7 @@ export interface components {
             /** @default 0 */
             order: number;
             title: string;
+            translations?: components["schemas"]["Translations"];
         };
         CertificationRow: {
             /** @enum {string} */
@@ -5104,6 +5114,7 @@ export interface components {
             /** @default 0 */
             order: number;
             title: string;
+            translations?: components["schemas"]["Translations"];
         };
         ContactInput: {
             /** @enum {string|null} */
@@ -5132,6 +5143,7 @@ export interface components {
             organization: string;
             startDate: string | null;
             title: string;
+            translations?: components["schemas"]["Translations"];
         };
         ExperienceRow: {
             description?: string | null;
@@ -5146,6 +5158,7 @@ export interface components {
             organization: string;
             startDate: string | null;
             title: string;
+            translations?: components["schemas"]["Translations"];
         };
         Health: {
             /** @enum {string} */
@@ -5262,6 +5275,7 @@ export interface components {
             /** @default 0 */
             order: number;
             title: string;
+            translations?: components["schemas"]["Translations"];
         };
         ProcessStepRow: {
             /** @default [] */
@@ -5274,6 +5288,7 @@ export interface components {
             /** @default 0 */
             order: number;
             title: string;
+            translations?: components["schemas"]["Translations"];
         };
         Profile: {
             /** @enum {string} */
@@ -5294,6 +5309,7 @@ export interface components {
             /** Format: uri */
             resumeUrl?: string | null;
             roleTitle: string;
+            translations?: components["schemas"]["Translations"];
             whatsapp?: string | null;
         };
         ProfileInput: {
@@ -5315,6 +5331,7 @@ export interface components {
             /** Format: uri */
             resumeUrl?: string | null;
             roleTitle: string;
+            translations?: components["schemas"]["Translations"];
             whatsapp?: string | null;
         };
         ProjectInput: {
@@ -5365,6 +5382,7 @@ export interface components {
                 /** @default 0 */
                 order: number;
                 title: string;
+                translations?: components["schemas"]["Translations"];
             }[];
             seoDescription?: string | null;
             seoTitle?: string | null;
@@ -5380,6 +5398,7 @@ export interface components {
             /** @default [] */
             technologyIds: string[];
             title: string;
+            translations?: components["schemas"]["Translations"];
             year?: number | null;
         };
         PublicCategory: {
@@ -5584,6 +5603,7 @@ export interface components {
             /** @default 0 */
             order: number;
             title: string;
+            translations?: components["schemas"]["Translations"];
         };
         ServiceRow: {
             /** @default [] */
@@ -5596,6 +5616,7 @@ export interface components {
             /** @default 0 */
             order: number;
             title: string;
+            translations?: components["schemas"]["Translations"];
         };
         SlugEntry: {
             slug: string;
@@ -5647,6 +5668,7 @@ export interface components {
             /** @default 0 */
             order: number;
             title: string;
+            translations?: components["schemas"]["Translations"];
         };
         TalkRow: {
             audience?: string | null;
@@ -5664,6 +5686,7 @@ export interface components {
             /** @default 0 */
             order: number;
             title: string;
+            translations?: components["schemas"]["Translations"];
         };
         TechnologyInput: {
             description?: string | null;
@@ -5681,6 +5704,7 @@ export interface components {
             /** @default 0 */
             order: number;
             slug: string;
+            translations?: components["schemas"]["Translations"];
         };
         TechnologyRow: {
             description?: string | null;
@@ -5699,6 +5723,13 @@ export interface components {
             /** @default 0 */
             order: number;
             slug: string;
+            translations?: components["schemas"]["Translations"];
+        };
+        /** @default {} */
+        Translations: {
+            en?: {
+                [key: string]: string | string[];
+            };
         };
         UploadedMedia: {
             bytes: number;
