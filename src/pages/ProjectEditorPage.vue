@@ -95,9 +95,39 @@ const techOptions = computed(() =>
 const categoryOptions = computed(() =>
   categories.value.map((c) => ({ label: String(c.name), value: c.id })),
 );
+const YOUTUBE = /(?:youtube\.com\/(?:shorts\/|watch\?(?:.*&)?v=|embed\/)|youtu\.be\/)([\w-]{11})/;
+const youtubeId = (url: string) => url.match(YOUTUBE)?.[1] ?? null;
+
+const videoThumb = (url: string) => `https://i.ytimg.com/vi/${youtubeId(url)}/hqdefault.jpg`;
+const videos = computed(() => form.media.filter((m) => youtubeId(m.url)));
 const mediaByDevice = computed(() =>
-  DEVICES.map((device) => ({ device, items: form.media.filter((m) => m.device === device) })),
+  DEVICES.map((device) => ({
+    device,
+    items: form.media.filter((m) => m.device === device && !youtubeId(m.url)),
+  })),
 );
+
+const videoUrl = ref('');
+const videoVertical = ref(true);
+
+function addVideo() {
+  const id = youtubeId(videoUrl.value.trim());
+  if (!id) {
+    notify.error(new Error('Cole um link válido do YouTube (vídeo ou Shorts)'));
+    return;
+  }
+  form.media.push({
+    type: 'VIDEO',
+    device: videoVertical.value ? 'MOBILE' : 'DESKTOP',
+    url: `https://www.youtube.com/watch?v=${id}`,
+    width: null,
+    height: null,
+    alt: '',
+    isShowcase: false,
+    order: form.media.length,
+  });
+  videoUrl.value = '';
+}
 
 watch(
   () => form.title,
@@ -425,6 +455,61 @@ async function save(status?: ProjectInput['status']) {
             Separe as telas por dispositivo. As marcadas como <strong>vitrine</strong> aparecem na
             cena do tablet da landing.
           </p>
+          <div class="q-mb-xl">
+            <div class="text-subtitle1 text-weight-medium q-mb-xs">Vídeos do YouTube</div>
+            <p class="lc-muted q-mb-sm">
+              Cole o link de um vídeo ou Shorts. Ele aparece na página do projeto na seção
+              <strong>Em ação</strong>, em moldura de celular quando for vertical.
+            </p>
+            <div class="row q-col-gutter-sm items-center q-mb-md">
+              <div class="col-12 col-md">
+                <q-input
+                  v-model="videoUrl"
+                  dense
+                  outlined
+                  dark
+                  label="Link do YouTube"
+                  placeholder="https://youtube.com/shorts/..."
+                  @keyup.enter="addVideo"
+                />
+              </div>
+              <div class="col-auto">
+                <q-toggle v-model="videoVertical" label="Vídeo vertical" color="primary" />
+              </div>
+              <div class="col-auto">
+                <q-btn color="primary" unelevated icon="add" label="Adicionar" @click="addVideo" />
+              </div>
+            </div>
+            <div v-if="videos.length" class="lc-grid">
+              <div
+                v-for="item in videos"
+                :key="item.url"
+                class="lc-card q-pa-sm column q-gutter-xs"
+              >
+                <q-img
+                  :src="videoThumb(item.url)"
+                  :ratio="item.device === 'DESKTOP' ? 16 / 9 : 9 / 16"
+                  class="rounded-borders"
+                  fit="cover"
+                />
+                <q-input
+                  v-model="item.alt"
+                  dense
+                  outlined
+                  dark
+                  autogrow
+                  label="Legenda (aparece ao lado do vídeo)"
+                />
+                <div class="row items-center justify-between">
+                  <span class="lc-muted text-caption">
+                    {{ item.device === 'DESKTOP' ? 'Horizontal' : 'Vertical' }}
+                  </span>
+                  <q-btn flat round dense icon="delete" color="grey-6" @click="removeMedia(item)" />
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div v-for="group in mediaByDevice" :key="group.device" class="q-mb-xl">
             <div class="text-subtitle1 text-weight-medium q-mb-sm">
               {{ LABELS.device[group.device] }}
